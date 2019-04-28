@@ -1,0 +1,4 @@
+ls -al
+sort -n
+head
+tail -n1 

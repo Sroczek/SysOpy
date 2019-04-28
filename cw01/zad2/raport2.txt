@@ -1,0 +1,36 @@
+
+Command: search_directory / * tmp.txt 
+Real: 0.730  User: 0.000 System: 0.000
+
+Command: search_directory /lib * tmp1.txt 
+Real: 0.020  User: 0.000 System: 0.000
+
+Command: search_directory /bin * tmp2.txt 
+Real: 0.000  User: 0.000 System: 0.000
+
+Command: load_block_from_file tmp.txt 
+Real: 0.150  User: 0.140 System: 0.000
+
+Command: load_block_from_file tmp1.txt 
+Real: 0.010  User: 0.010 System: 0.000
+
+Command: load_block_from_file tmp2.txt 
+Real: 0.000  User: 0.000 System: 0.000
+
+Command: delete_block 0 
+Real: 0.000  User: 0.000 System: 0.000
+
+Command: delete_block 1 
+Real: 0.000  User: 0.000 System: 0.000
+
+Command: delete_block 2 
+Real: 0.000  User: 0.000 System: 0.000
+
+Command: repeat_load_and_remove tmp.txt 5 4 
+Real: 3.040  User: 2.910 System: 0.120
+
+Command: repeat_load_and_remove tmp1.txt 5 4 
+Real: 0.060  User: 0.070 System: 0.000
+
+Command: repeat_load_and_remove tmp2.txt 5 4 
+Real: 0.000  User: 0.000 System: 0.000

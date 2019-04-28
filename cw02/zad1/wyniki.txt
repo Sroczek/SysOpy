@@ -1,0 +1,43 @@
+Dla małych romiarów plików sortowania zrealizowanie przy pomoy funkcji bibliotecznych działają szybciej,
+co może być konsekwencją ich optymalizacji na poziomie implementacji.
+Dla większych rozmiarów zdecydowanie lepiej radzą sobie funkcje oparte o funkcje systemowe.
+
+
+       Command                                         user     sys
+
+sort copy1.txt 7500 1 lib                             1.180    1.260
+sort copy2.txt 7500 1 sys                             0.970    7.240
+ 
+sort copy1.txt 7500 4 lib                             1.260    1.260
+sort copy2.txt 7500 4 sys                             0.920    7.400
+ 
+sort copy1.txt 7500 512 lib                           1.580    2.610
+sort copy2.txt 7500 512 sys                           0.950    8.220
+ 
+sort copy1.txt 7500 1024 lib                          1.640    4.490
+sort copy2.txt 7500 1024 sys                          0.980    9.030
+ 
+sort copy1.txt 7500 4096 lib                          2.350    16.090
+sort copy2.txt 7500 4096 sys                          0.940    10.100
+ 
+sort copy1.txt 7500 8192 lib                          2.450    16.080
+sort copy2.txt 7500 8192 sys                          0.980    10.150
+ 
+sort copy1.txt 15000 1 lib                            5.040    4.940
+sort copy2.txt 15000 1 sys                            3.820    30.390
+ 
+sort copy1.txt 15000 4 lib                            5.230    4.640
+sort copy2.txt 15000 4 sys                            3.850    30.330
+ 
+sort copy1.txt 15000 512 lib                          5.800    11.590
+sort copy2.txt 15000 512 sys                          4.030    35.750
+ 
+sort copy1.txt 15000 1024 lib                         6.610    19.100
+sort copy2.txt 15000 1024 sys                         3.760    38.180
+ 
+sort copy1.txt 15000 4096 lib                         10.040    63.390
+sort copy2.txt 15000 4096 sys                         4.130    40.870
+ 
+sort copy1.txt 15000 8192 lib                         9.580    67.570
+sort copy2.txt 15000 8192 sys                         3.890    41.280
+ 
