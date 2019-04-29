@@ -4,6 +4,10 @@
 #include <string.h>
 #include <signal.h>
 #include <time.h>
+#include <sys/types.h>
+#include <sys/times.h>
+#include <unistd.h>
+#include <errno.h>
 #include "communication.h"
 
 
@@ -19,16 +23,15 @@ struct client clients[MAX_CLIENTS_NUMB];
 int server_queueID = -1;
 int is_running = 1;
 
-
 int exist_client(int clientID){
     return clientID >= 0 && clientID < MAX_CLIENTS_NUMB && clients[clientID].queue_key != -1;
 }
 
 char* get_date(){
     time_t curr_time;
-    times(&curr_time);
-    char buffer[21];
-    strftime(buffer,21,"%Y-%m-%d_%H-%M-%S ",localtime(curr_time));
+    time(&curr_time);
+    char* buffer = calloc(21,sizeof(char));
+    strftime(buffer,21,"%Y-%m-%d_%H-%M-%S ",localtime(&curr_time));
     return buffer;
 }
 
@@ -43,7 +46,7 @@ int send_from_server(int clientID, enum COMMAND command_type, char message[MESSA
     }
 
     if (msgsnd(clients[clientID].queue_key, &msg, msg_size, IPC_NOWAIT)) {
-        printf("Error while sending\n");
+        printf("Error while sending to client\n");
         return 1;
     }
     return 0;
@@ -69,10 +72,12 @@ int send_from_client(int clientID, int senderID, enum COMMAND command_type, char
 void init(int clientID, char message_text[MESSAGE_SIZE]){
     int i=0;
     while(i<MAX_CLIENTS_NUMB && clients[i].pid != -1) i++;
+    
     if(clients[i].pid != -1){
         printf("Cannot add more clients\n");
         return;
     }
+    printf("NANA %i\n",i);
     
     int client_queue_key;
     sscanf(message_text, "%i", &client_queue_key);
@@ -100,14 +105,14 @@ void list(int clientID){
     char buffer[MESSAGE_SIZE];
     for(int i=0; i<MAX_CLIENTS_NUMB; i++){
         if(clients[i].pid != -1){
-            sprintf(buffer, "ID: %ld Key: %i\n", clients[i].pid, clients[i].queue_key);
+            sprintf(buffer, "ID: %ld Key: %i\n", (long int)clients[i].pid, clients[i].queue_key);
             strcat(response, buffer);
         } 
     }
     send_from_server(clientID, LIST, response);
 }
 
-void add_friends(int clientID, struct client* friend){
+void add_friend(int clientID, struct client* friend){
     int first_free_place = -1;
     for(int i=0; i<MAX_FRIENDS_NUMB; i++){
         if(clients[clientID].friends[i] == NULL && first_free_place == -1){
@@ -119,18 +124,51 @@ void add_friends(int clientID, struct client* friend){
         printf("Cannot add more friends\n");
         return;
     }
-    clients[clientID].friends[first_free_place] == friend;
+    clients[clientID].friends[first_free_place] = friend;
     clients[clientID].friends_numb++;
 }
 
-void delete_friends(int clientID, struct client* friend){
+void delete_friend(int clientID, struct client* friend){
     for(int i=0; i<MAX_FRIENDS_NUMB; i++){
         if(clients[clientID].friends[i] == friend){
             clients[clientID].friends[i] = NULL;
+            clients[clientID].friends_numb--;
             return;
         }
     }
     printf("Cannot delete friend which is not friend of given client\n");
+}
+
+void add_friends(int clientID, char message_text[MESSAGE_SIZE]){
+    char delim[] = " ";
+    char *tmp;
+    tmp = strtok(message_text,delim);
+    while(tmp != NULL){
+        clientID = strtol(tmp, NULL, 10);
+        if(!exist_client(clientID)){
+            printf("Wrong client ID\n");
+        }
+        else{
+            add_friend(clientID, &clients[clientID]);
+        }
+        tmp = strtok(NULL, delim);
+    }
+}
+
+void delete_friends(int clientID, char message_text[MESSAGE_SIZE]){
+    char delim[] = " ";
+    char *tmp;
+    tmp = strtok(message_text,delim);
+    while(tmp != NULL){
+        clientID = strtol(tmp, NULL, 10);
+        if(!exist_client(clientID)){
+            printf("Wrong client ID\n");
+        }
+        else{
+            delete_friend(clientID, &clients[clientID]);
+        }
+        tmp = strtok(NULL, delim);
+    }
 }
 
 void clean_friends(int clientID){
@@ -139,7 +177,6 @@ void clean_friends(int clientID){
 
 void friends(int clientID, char message_text[MESSAGE_SIZE]){
     clean_friends(clientID);
-    int clientID;
     char delim[] = " ";
     char *tmp;
     tmp = strtok(message_text,delim);
@@ -159,7 +196,7 @@ void send_2_one(int clientID, char message_text[MESSAGE_SIZE]){
     char buffer[16];
     int i = 0;
     for(; i<16; i++){
-        if(message_text[i] = " ") break;
+        if(message_text[i] == ' ') break;
         buffer[i] = message_text[i];
     }
 
@@ -225,23 +262,24 @@ void handle_message(struct MESSAGE* msg){
         case SEND_2_ALL:
             send_2_all(msg->senderID, msg->message);
             break;
-        // case :
-            // (msg->senderID, msg->message);
-            // break;                    
+        default :
+            printf("Unknown command\n");
+            break;                    
     }
 }
 
-int main(char *argv, int argc){
+int main(int argc, char** argv){
 
     for(int i=0; i<MAX_CLIENTS_NUMB;i++){
+        clients[i].pid = -1;
         clients[i].clientID = -1;
         clients[i].queue_key = -1;
-        clients[i].friends_numb =0;
+        clients[i].friends_numb = 0;
     }
 
-    server_queueID = msgget(getServerQueueKey(), IPC_CREAT | IPC_EXCL | 0666);
+    server_queueID = msgget(getServerQueueKey(), IPC_PRIVATE | IPC_EXCL | 0666);
     if( server_queueID == -1){
-        printf("Error while creating queue\n");
+        printf("Error while creating queue: %s\n", strerror(errno));
         exit(-1);
     }
 
