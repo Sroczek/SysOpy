@@ -10,6 +10,7 @@
 #include <errno.h>
 #include "communication.h"
 
+#define FLAG IPC_CREAT
 
 struct client{
     int clientID;
@@ -49,6 +50,8 @@ int send_from_server(int clientID, enum COMMAND command_type, char message[MESSA
         printf("Error while sending to client\n");
         return 1;
     }
+
+    kill(clients[clientID].pid, SIGRTMIN);
     return 0;
 }
 
@@ -66,6 +69,8 @@ int send_from_client(int clientID, int senderID, enum COMMAND command_type, char
         printf("Error while sending\n");
         return 1;
     }
+
+    kill(clients[clientID].pid, SIGRTMIN);
     return 0;
 }
 
@@ -77,7 +82,6 @@ void init(int clientID, char message_text[MESSAGE_SIZE]){
         printf("Cannot add more clients\n");
         return;
     }
-    printf("NANA %i\n",i);
     
     int client_queue_key;
     sscanf(message_text, "%i", &client_queue_key);
@@ -102,13 +106,17 @@ void echo(int clientID, char message_text[MESSAGE_SIZE]){
 
 void list(int clientID){
     char response[MESSAGE_SIZE];
+    for(int i=0; i< MESSAGE_SIZE; i++){
+        response[i] = '\0';
+    }
     char buffer[MESSAGE_SIZE];
     for(int i=0; i<MAX_CLIENTS_NUMB; i++){
         if(clients[i].pid != -1){
-            sprintf(buffer, "ID: %ld Key: %i\n", (long int)clients[i].pid, clients[i].queue_key);
+            sprintf(buffer, "ID: %i PID: %ld Key: %i\n", i, (long int)clients[i].pid, clients[i].queue_key);
             strcat(response, buffer);
         } 
     }
+    // printf("%s", response);
     send_from_server(clientID, LIST, response);
 }
 
@@ -143,13 +151,14 @@ void add_friends(int clientID, char message_text[MESSAGE_SIZE]){
     char delim[] = " ";
     char *tmp;
     tmp = strtok(message_text,delim);
+    int friendID;
     while(tmp != NULL){
-        clientID = strtol(tmp, NULL, 10);
-        if(!exist_client(clientID)){
-            printf("Wrong client ID\n");
+        friendID = strtol(tmp, NULL, 10);
+        if(!exist_client(friendID)){
+            printf("Wrong client ID %i\n", friendID);
         }
         else{
-            add_friend(clientID, &clients[clientID]);
+            add_friend(clientID, &clients[friendID]);
         }
         tmp = strtok(NULL, delim);
     }
@@ -159,13 +168,14 @@ void delete_friends(int clientID, char message_text[MESSAGE_SIZE]){
     char delim[] = " ";
     char *tmp;
     tmp = strtok(message_text,delim);
+    int friendID;
     while(tmp != NULL){
-        clientID = strtol(tmp, NULL, 10);
-        if(!exist_client(clientID)){
+        friendID = strtol(tmp, NULL, 10);
+        if(!exist_client(friendID)){
             printf("Wrong client ID\n");
         }
         else{
-            delete_friend(clientID, &clients[clientID]);
+            delete_friend(clientID, &clients[friendID]);
         }
         tmp = strtok(NULL, delim);
     }
@@ -179,14 +189,15 @@ void friends(int clientID, char message_text[MESSAGE_SIZE]){
     clean_friends(clientID);
     char delim[] = " ";
     char *tmp;
+    int friendID;
     tmp = strtok(message_text,delim);
     while(tmp != NULL){
-        clientID = strtol(tmp, NULL, 10);
-        if(!exist_client(clientID)){
+        friendID = strtol(tmp, NULL, 10);
+        if(!exist_client(friendID)){
             printf("Wrong client ID\n");
         }
         else{
-            add_friend(clientID, &clients[clientID]);
+            add_friend(clientID, &clients[friendID]);
         }
         tmp = strtok(NULL, delim);
     }
@@ -211,12 +222,14 @@ void send_2_one(int clientID, char message_text[MESSAGE_SIZE]){
 
 void send_2_friends(int clientID, char message_text[MESSAGE_SIZE]){
     for(int i=0; i<MAX_FRIENDS_NUMB; i++){
+        if(clients[clientID].friends[i] != NULL){
             if(exist_client(clients[clientID].friends[i]->clientID)){
-            char *date = get_date();
-            char dated_message[MESSAGE_SIZE];
-            sprintf(dated_message, "%s %s", date, message_text);
+                char *date = get_date();
+                char dated_message[MESSAGE_SIZE];
+                sprintf(dated_message, "%s %s", date, message_text);
 
-            send_from_client(clients[clientID].friends[i]->clientID, clientID, SEND_2_FRIENDS, dated_message);
+                send_from_client(clients[clientID].friends[i]->clientID, clientID, SEND_2_FRIENDS, dated_message);
+            }
         }
     }
 }
@@ -233,7 +246,18 @@ void send_2_all(int clientID, char message_text[MESSAGE_SIZE]){
     }
 }
 
+void del_client(int clientID){
+    clients[clientID].pid = -1;
+    clients[clientID].clientID = -1;
+    clients[clientID].friends_numb = 0;
+    clients[clientID].queue_key = -1;
+    // for(int i=0; i<MAX_CLIENTS_NUMB; i++){
+    //     clients[clientID].friends[i] = NULL;
+    // }
+}
+
 void handle_message(struct MESSAGE* msg){
+    // printf("%ld", msg->command_type);
     switch(msg->command_type){
         case INIT:
             init(msg->senderID, msg->message);
@@ -262,14 +286,42 @@ void handle_message(struct MESSAGE* msg){
         case SEND_2_ALL:
             send_2_all(msg->senderID, msg->message);
             break;
-        default :
+        case STOP:
+            del_client(msg->senderID);
+            break;
+        default:
             printf("Unknown command\n");
-            break;                    
+            break;
     }
+}
+
+void stop(){
+    int counter = 0;
+    for(int i=0; i<MAX_CLIENTS_NUMB; i++){
+        if(exist_client(i)){
+            // send_from_server(i, STOP, "");
+            kill(clients[i].pid, SIGINT);
+            counter++;
+            // printf("ZABIJAM: %i", i);
+        }   
+    }       
+           
+    struct MESSAGE buf;
+    while(counter>0){
+        msgrcv(server_queueID, &buf, msg_size, 0, 0);
+        counter--;
+    }
+
+    is_running = 0;
+}
+
+void sigint_handler(){
+    stop();
 }
 
 int main(int argc, char** argv){
 
+    signal(SIGINT, sigint_handler);
     for(int i=0; i<MAX_CLIENTS_NUMB;i++){
         clients[i].pid = -1;
         clients[i].clientID = -1;
@@ -277,7 +329,7 @@ int main(int argc, char** argv){
         clients[i].friends_numb = 0;
     }
 
-    server_queueID = msgget(getServerQueueKey(), IPC_PRIVATE | IPC_EXCL | 0666);
+    server_queueID = msgget(getServerQueueKey(), FLAG | IPC_EXCL | 0666);
     if( server_queueID == -1){
         printf("Error while creating queue: %s\n", strerror(errno));
         exit(-1);
@@ -289,6 +341,6 @@ int main(int argc, char** argv){
         handle_message(&buf);
     }
     
-    // some cleanings TODO
+    msgctl(server_queueID, IPC_RMID, NULL);
     return 0;
 }

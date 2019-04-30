@@ -6,8 +6,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <errno.h>
 #include "communication.h"
 
+#define DEBUG 0
 
 int is_running = 1;
 int clientID = -1;
@@ -38,6 +40,28 @@ int receive(struct MESSAGE *msg) {
     return 0;
 }
 
+
+int count_args(char args[MAX_COMMAND_SIZE]){
+    int argc = 0;
+    int i=0;
+    int before = 0; //0 stands for white character, 1 stands for argument
+    for(; i<MAX_COMMAND_SIZE && args[i] != '\0'; i++){
+        if(before == 0){
+            if(args[i] != ' '){
+                before = 1;
+                argc++;
+            }
+        }
+        else{
+            if(args[i] == ' '){
+                before = 0;
+            }
+        }
+    }
+    if(args[i-2] == ' ') argc--;
+    return argc;
+}
+
 char* read_line_from_cmd(FILE* fd){
     char* line = calloc(MAX_COMMAND_SIZE,sizeof(char));
     line = fgets(line, MAX_COMMAND_SIZE * sizeof(char), fd);
@@ -48,15 +72,35 @@ char* read_line_from_cmd(FILE* fd){
     //     printf("Error while reading from cmd\n");
     //     return NULL;
     // }
+    if(DEBUG) printf("Line readed.\n\n");
     return line;
 }
 
-int count_args(char args[MAX_COMMAND_SIZE]){
-    int argc = 0;
-    for(int i=0; i<MAX_COMMAND_SIZE && args[i] != '\0'; i++){
-        if(args[i] == ' ') argc++;
+void execute(char line[MAX_COMMAND_SIZE]);
+
+void read_from_file(char args[MAX_COMMAND_SIZE]){
+    
+    if(count_args(args) < 1){
+        printf("Too few arguments in READ call\n");
+        return;
     }
-    return argc;
+
+    char* file_name;
+    char delim[] = " \n";
+    file_name = strtok(args,delim);
+
+    FILE* file = fopen(file_name, "rw");
+
+    if(file == NULL){
+        printf("%s\n", strerror(errno));
+        return;
+    }
+    
+    char *line = NULL;
+    size_t size;
+    while(getline(&line,&size,file) != -1){
+        execute(line);
+    }
 }
 
 /////////////////////////////////////////
@@ -74,8 +118,8 @@ void init(){
         printf("Error while sending INIT to server\n");
         return;
     }
-    receive(&msg);
-    sscanf(msg.message, "%i", &clientID);
+    // receive(&msg);
+    // sscanf(msg.message, "%i", &clientID);
 }
 
 void stop(){
@@ -85,11 +129,10 @@ void stop(){
 
 void list(){
     send_to_server(LIST, "");
-    
-    struct MESSAGE msg;
-    receive(&msg);
+    // struct MESSAGE msg;
+    // receive(&msg);
 
-    printf("%s", msg.message);
+    // printf("%s", msg.message);
 }
 
 void send_2_one(char args[MAX_COMMAND_SIZE]){
@@ -110,18 +153,11 @@ void send_2_friends(char args[MAX_COMMAND_SIZE]){
 }
 
 void send_2_all(char args[MAX_COMMAND_SIZE]){
-    send_2_all(args);
-}
-
-void friends(char args[MAX_COMMAND_SIZE]){
-    if(count_args(args) < 1){
-        printf("Too few arguments in FRIENDS call\n");
-        return;
-    }
-    send_to_server(FRIENDS, args);
+    send_to_server(SEND_2_ALL, args);
 }
 
 void add(char args[MAX_COMMAND_SIZE]){
+    if(DEBUG) printf("NUMBER OF ARGUMNETS:  %i\n\n", count_args(args));
     if(count_args(args) < 1){
         printf("Too few arguments in ADD call\n");
         return;
@@ -137,18 +173,26 @@ void del(char args[MAX_COMMAND_SIZE]){
     send_to_server(DEL_FRIENDS, args);
 }
 
+void friends(char args[MAX_COMMAND_SIZE]){
+    if(count_args(args) < 0){
+        printf("Too few arguments in DEL call\n");
+        return;
+    }
+    send_to_server(FRIENDS, args);    
+}
+
 void echo(char args[MAX_COMMAND_SIZE]){
     send_to_server(ECHO, args);
     
-    struct MESSAGE msg;
-    receive(&msg);
-    printf("%s", msg.message);
+    // struct MESSAGE msg;
+    // receive(&msg);
+    // printf("%s", msg.message);
 }
 
 /////////////////////////////////////////
 
 void execute(char line[MAX_COMMAND_SIZE]){
-    char command[8];
+    char command[16];
     /*
     commands are like to the following:
         -init 
@@ -163,7 +207,23 @@ void execute(char line[MAX_COMMAND_SIZE]){
         -del lista
     */
     char args[MAX_COMMAND_SIZE];
-    sscanf(line, "%s %s", command, args);
+    if(DEBUG) printf("LINE:   %s", line);
+/////////////////////////////
+    int i=0;
+    while(i<16 && line[i] != ' ' && line[i] != '\n'){
+        command[i] = line[i];
+        i++;
+    }
+
+    if(i<16) command[i] = '\0';
+    i++;
+    int shift = i;
+    while(i<MAX_COMMAND_SIZE){
+        args[i-shift] = line[i];
+        i++;
+    }
+
+    if(DEBUG) printf("COMMAND:   %s  ARGS:%s", command, args);
     to_upper(command);
 
     if(strcmp(command, "2ONE") == 0){
@@ -186,29 +246,71 @@ void execute(char line[MAX_COMMAND_SIZE]){
         stop();
     }else if(strcmp(command, "INIT") == 0){
         init();
+    }else if(strcmp(command, "READ") == 0){
+        read_from_file(args);
+    }else{
+        printf("Unknown command\n");
     }
+}
+
+void handle_message(struct MESSAGE msg){
+    switch(msg.command_type){
+        case INIT:
+            sscanf(msg.message, "%i", &clientID);
+            break;
+        case ECHO:
+            printf("%s", msg.message);
+            break;
+        case LIST:
+            printf("%s", msg.message);
+            break;
+        case SEND_2_ALL:
+            printf("%s", msg.message);
+            break;
+        case SEND_2_FRIENDS:
+            printf("%s", msg.message);
+            break;
+        case SEND_2_ONE:
+            printf("%s", msg.message);
+            break;
+        default:
+            printf("Received unknown type of message");
+            break;
+    }
+}
+
+void sigrtmin_handler(){
+     struct MESSAGE msg;
+        if(receive(&msg) == 0){
+            handle_message(msg);
+        }
 }
 
 void sigint_handler(){
     stop();
+    exit(-1);
 }
 
 int main(int argc, char** argv){
+
+    signal(SIGRTMIN, sigrtmin_handler);
     signal(SIGINT, sigint_handler);
 
     if ((server_queue_key = msgget(getServerQueueKey(), 0)) == -1){
         printf("Error while opening server queue\n");
+        exit(-1);
     }
     if ((client_queue_key = msgget(getClientQueueKey(), IPC_CREAT | IPC_EXCL | 0666)) == -1){
         printf("Error while creating client queue\n");
+        exit(-1);
     }
     init();
-    
+
     while (is_running) {
         char* line = read_line_from_cmd(fdopen(STDIN_FILENO, "r"));
         execute(line);
     }
 
-    //some cleanings 
+    msgctl(client_queue_key, IPC_RMID, NULL);
     return 0;
 }
