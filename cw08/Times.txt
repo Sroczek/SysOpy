@@ -1,0 +1,429 @@
+
+----------------------------------------------------
+Size of pattern 3x3       Number of treads: 1
+
+Thread number 0 have worked for 0.032895 s
+
+Total time: 0.033135 s
+
+----------------------------------------------------
+Size of pattern 3x3       Number of treads: 2
+
+Thread number 0 have worked for 0.016497 s
+Thread number 1 have worked for 0.016378 s
+
+Total time: 0.020134 s
+
+----------------------------------------------------
+Size of pattern 3x3       Number of treads: 4
+
+Thread number 0 have worked for 0.013454 s
+Thread number 1 have worked for 0.013558 s
+Thread number 2 have worked for 0.012773 s
+Thread number 3 have worked for 0.012819 s
+
+Total time: 0.014169 s
+
+----------------------------------------------------
+Size of pattern 3x3       Number of treads: 8
+
+Thread number 0 have worked for 0.009179 s
+Thread number 1 have worked for 0.004319 s
+Thread number 2 have worked for 0.006679 s
+Thread number 3 have worked for 0.004094 s
+Thread number 4 have worked for 0.005598 s
+Thread number 5 have worked for 0.005995 s
+Thread number 6 have worked for 0.005151 s
+Thread number 7 have worked for 0.006773 s
+
+Total time: 0.018518 s
+
+----------------------------------------------------
+Size of pattern 9x9       Number of treads: 1
+
+Thread number 0 have worked for 0.248425 s
+
+Total time: 0.248620 s
+
+----------------------------------------------------
+Size of pattern 9x9       Number of treads: 2
+
+Thread number 0 have worked for 0.137762 s
+Thread number 1 have worked for 0.137762 s
+
+Total time: 0.138036 s
+
+----------------------------------------------------
+Size of pattern 9x9       Number of treads: 4
+
+Thread number 0 have worked for 0.069343 s
+Thread number 1 have worked for 0.069634 s
+Thread number 2 have worked for 0.068254 s
+Thread number 3 have worked for 0.068485 s
+
+Total time: 0.080118 s
+
+----------------------------------------------------
+Size of pattern 9x9       Number of treads: 8
+
+Thread number 0 have worked for 0.036104 s
+Thread number 1 have worked for 0.035011 s
+Thread number 2 have worked for 0.073186 s
+Thread number 3 have worked for 0.069180 s
+Thread number 4 have worked for 0.055097 s
+Thread number 5 have worked for 0.052986 s
+Thread number 6 have worked for 0.048502 s
+Thread number 7 have worked for 0.050721 s
+
+Total time: 0.084167 s
+
+----------------------------------------------------
+Size of pattern 15x15       Number of treads: 1
+
+Thread number 0 have worked for 0.681375 s
+
+Total time: 0.681612 s
+
+----------------------------------------------------
+Size of pattern 15x15       Number of treads: 2
+
+Thread number 0 have worked for 0.365256 s
+Thread number 1 have worked for 0.365879 s
+
+Total time: 0.366037 s
+
+----------------------------------------------------
+Size of pattern 15x15       Number of treads: 4
+
+Thread number 0 have worked for 0.182391 s
+Thread number 1 have worked for 0.183612 s
+Thread number 2 have worked for 0.182484 s
+Thread number 3 have worked for 0.182825 s
+
+Total time: 0.184546 s
+
+----------------------------------------------------
+Size of pattern 15x15       Number of treads: 8
+
+Thread number 0 have worked for 0.187516 s
+Thread number 1 have worked for 0.099392 s
+Thread number 2 have worked for 0.091565 s
+Thread number 3 have worked for 0.137279 s
+Thread number 4 have worked for 0.131244 s
+Thread number 5 have worked for 0.175057 s
+Thread number 6 have worked for 0.175686 s
+Thread number 7 have worked for 0.164191 s
+
+Total time: 0.196037 s
+
+----------------------------------------------------
+Size of pattern 21x21       Number of treads: 1
+
+Thread number 0 have worked for 1.332254 s
+
+Total time: 1.332515 s
+
+----------------------------------------------------
+Size of pattern 21x21       Number of treads: 2
+
+Thread number 0 have worked for 0.701971 s
+Thread number 1 have worked for 0.703284 s
+
+Total time: 0.703443 s
+
+----------------------------------------------------
+Size of pattern 21x21       Number of treads: 4
+
+Thread number 0 have worked for 0.358835 s
+Thread number 1 have worked for 0.354002 s
+Thread number 2 have worked for 0.360783 s
+Thread number 3 have worked for 0.359471 s
+
+Total time: 0.360957 s
+
+----------------------------------------------------
+Size of pattern 21x21       Number of treads: 8
+
+Thread number 0 have worked for 0.337441 s
+Thread number 1 have worked for 0.306917 s
+Thread number 2 have worked for 0.332152 s
+Thread number 3 have worked for 0.365900 s
+Thread number 4 have worked for 0.200173 s
+Thread number 5 have worked for 0.292953 s
+Thread number 6 have worked for 0.298033 s
+Thread number 7 have worked for 0.362425 s
+
+Total time: 0.386247 s
+
+----------------------------------------------------
+Size of pattern 27x27       Number of treads: 1
+
+Thread number 0 have worked for 2.199987 s
+
+Total time: 2.200237 s
+
+----------------------------------------------------
+Size of pattern 27x27       Number of treads: 2
+
+Thread number 0 have worked for 1.104250 s
+Thread number 1 have worked for 1.103971 s
+
+Total time: 1.104380 s
+
+----------------------------------------------------
+Size of pattern 27x27       Number of treads: 4
+
+Thread number 0 have worked for 0.583226 s
+Thread number 1 have worked for 0.589869 s
+Thread number 2 have worked for 0.626676 s
+Thread number 3 have worked for 0.589956 s
+
+Total time: 0.626844 s
+
+----------------------------------------------------
+Size of pattern 27x27       Number of treads: 8
+
+Thread number 0 have worked for 0.393795 s
+Thread number 1 have worked for 0.398409 s
+Thread number 2 have worked for 0.527768 s
+Thread number 3 have worked for 0.487516 s
+Thread number 4 have worked for 0.595150 s
+Thread number 5 have worked for 0.575854 s
+Thread number 6 have worked for 0.549827 s
+Thread number 7 have worked for 0.534314 s
+
+Total time: 0.602408 s
+
+----------------------------------------------------
+Size of pattern 33x33       Number of treads: 1
+
+Thread number 0 have worked for 3.322370 s
+
+Total time: 3.322627 s
+
+----------------------------------------------------
+Size of pattern 33x33       Number of treads: 2
+
+Thread number 0 have worked for 1.663372 s
+Thread number 1 have worked for 1.664461 s
+
+Total time: 1.664587 s
+
+----------------------------------------------------
+Size of pattern 33x33       Number of treads: 4
+
+Thread number 0 have worked for 0.901398 s
+Thread number 1 have worked for 0.908868 s
+Thread number 2 have worked for 0.906311 s
+Thread number 3 have worked for 0.905596 s
+
+Total time: 0.912616 s
+
+----------------------------------------------------
+Size of pattern 33x33       Number of treads: 8
+
+Thread number 0 have worked for 0.864906 s
+Thread number 1 have worked for 0.828163 s
+Thread number 2 have worked for 0.763256 s
+Thread number 3 have worked for 0.807110 s
+Thread number 4 have worked for 0.836424 s
+Thread number 5 have worked for 0.947604 s
+Thread number 6 have worked for 0.873188 s
+Thread number 7 have worked for 0.894071 s
+
+Total time: 0.970257 s
+
+----------------------------------------------------
+Size of pattern 39x39       Number of treads: 1
+
+Thread number 0 have worked for 4.622147 s
+
+Total time: 4.622408 s
+
+----------------------------------------------------
+Size of pattern 39x39       Number of treads: 2
+
+Thread number 0 have worked for 2.338547 s
+Thread number 1 have worked for 2.355607 s
+
+Total time: 2.355779 s
+
+----------------------------------------------------
+Size of pattern 39x39       Number of treads: 4
+
+Thread number 0 have worked for 1.280305 s
+Thread number 1 have worked for 1.253121 s
+Thread number 2 have worked for 1.251605 s
+Thread number 3 have worked for 1.265608 s
+
+Total time: 1.280463 s
+
+----------------------------------------------------
+Size of pattern 39x39       Number of treads: 8
+
+Thread number 0 have worked for 1.009365 s
+Thread number 1 have worked for 1.009801 s
+Thread number 2 have worked for 1.264248 s
+Thread number 3 have worked for 1.249767 s
+Thread number 4 have worked for 1.251337 s
+Thread number 5 have worked for 1.251772 s
+Thread number 6 have worked for 1.176457 s
+Thread number 7 have worked for 1.239052 s
+
+Total time: 1.273182 s
+
+----------------------------------------------------
+Size of pattern 45x45       Number of treads: 1
+
+Thread number 0 have worked for 6.164004 s
+
+Total time: 6.164269 s
+
+----------------------------------------------------
+Size of pattern 45x45       Number of treads: 2
+
+Thread number 0 have worked for 3.097821 s
+Thread number 1 have worked for 3.096688 s
+
+Total time: 3.097959 s
+
+----------------------------------------------------
+Size of pattern 45x45       Number of treads: 4
+
+Thread number 0 have worked for 1.678650 s
+Thread number 1 have worked for 1.668851 s
+Thread number 2 have worked for 1.675650 s
+Thread number 3 have worked for 1.686661 s
+
+Total time: 1.695611 s
+
+----------------------------------------------------
+Size of pattern 45x45       Number of treads: 8
+
+Thread number 0 have worked for 1.476854 s
+Thread number 1 have worked for 1.580055 s
+Thread number 2 have worked for 1.735643 s
+Thread number 3 have worked for 1.638222 s
+Thread number 4 have worked for 1.654004 s
+Thread number 5 have worked for 1.599794 s
+Thread number 6 have worked for 1.707998 s
+Thread number 7 have worked for 1.583877 s
+
+Total time: 1.738410 s
+
+----------------------------------------------------
+Size of pattern 51x51       Number of treads: 1
+
+Thread number 0 have worked for 8.024338 s
+
+Total time: 8.024583 s
+
+----------------------------------------------------
+Size of pattern 51x51       Number of treads: 2
+
+Thread number 0 have worked for 3.997194 s
+Thread number 1 have worked for 3.995008 s
+
+Total time: 3.997325 s
+
+----------------------------------------------------
+Size of pattern 51x51       Number of treads: 4
+
+Thread number 0 have worked for 2.155445 s
+Thread number 1 have worked for 2.165587 s
+Thread number 2 have worked for 2.128884 s
+Thread number 3 have worked for 2.147966 s
+
+Total time: 2.171760 s
+
+----------------------------------------------------
+Size of pattern 51x51       Number of treads: 8
+
+Thread number 0 have worked for 2.760084 s
+Thread number 1 have worked for 2.840788 s
+Thread number 2 have worked for 2.900201 s
+Thread number 3 have worked for 2.661572 s
+Thread number 4 have worked for 2.528051 s
+Thread number 5 have worked for 2.715212 s
+Thread number 6 have worked for 2.879318 s
+Thread number 7 have worked for 2.762632 s
+
+Total time: 2.913914 s
+
+----------------------------------------------------
+Size of pattern 57x57       Number of treads: 1
+
+Thread number 0 have worked for 10.077471 s
+
+Total time: 10.077719 s
+
+----------------------------------------------------
+Size of pattern 57x57       Number of treads: 2
+
+Thread number 0 have worked for 5.118469 s
+Thread number 1 have worked for 5.126303 s
+
+Total time: 5.126516 s
+
+----------------------------------------------------
+Size of pattern 57x57       Number of treads: 4
+
+Thread number 0 have worked for 3.331306 s
+Thread number 1 have worked for 3.157498 s
+Thread number 2 have worked for 3.194138 s
+Thread number 3 have worked for 3.043293 s
+
+Total time: 3.331443 s
+
+----------------------------------------------------
+Size of pattern 57x57       Number of treads: 8
+
+Thread number 0 have worked for 2.756916 s
+Thread number 1 have worked for 2.785028 s
+Thread number 2 have worked for 2.864213 s
+Thread number 3 have worked for 2.862692 s
+Thread number 4 have worked for 2.836613 s
+Thread number 5 have worked for 2.760582 s
+Thread number 6 have worked for 2.961229 s
+Thread number 7 have worked for 2.745717 s
+
+Total time: 2.974590 s
+
+----------------------------------------------------
+Size of pattern 63x63       Number of treads: 1
+
+Thread number 0 have worked for 12.670421 s
+
+Total time: 12.670672 s
+
+----------------------------------------------------
+Size of pattern 63x63       Number of treads: 2
+
+Thread number 0 have worked for 6.139165 s
+Thread number 1 have worked for 6.157157 s
+
+Total time: 6.157331 s
+
+----------------------------------------------------
+Size of pattern 63x63       Number of treads: 4
+
+Thread number 0 have worked for 3.813994 s
+Thread number 1 have worked for 3.812532 s
+Thread number 2 have worked for 3.947512 s
+Thread number 3 have worked for 3.714317 s
+
+Total time: 3.947654 s
+
+----------------------------------------------------
+Size of pattern 63x63       Number of treads: 8
+
+Thread number 0 have worked for 3.371527 s
+Thread number 1 have worked for 3.174620 s
+Thread number 2 have worked for 3.451849 s
+Thread number 3 have worked for 3.432814 s
+Thread number 4 have worked for 3.415852 s
+Thread number 5 have worked for 3.413940 s
+Thread number 6 have worked for 3.338636 s
+Thread number 7 have worked for 3.200045 s
+
+Total time: 3.452042 s
